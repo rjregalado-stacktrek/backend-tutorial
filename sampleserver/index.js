@@ -3,7 +3,7 @@ const app = express();
 
 const PORT = 3001;
 
-let jokes =  [
+let  products =  [
     {
       "id": 1,
       "setup": "Why did the tomato turn red?",
@@ -34,7 +34,7 @@ app.get('/', (req,res) => {
 })
 
 // get all the contents in database
-app.get('/api/jokes', (req,res) => {
+app.get('/api/products', (req,res) => {
     res.json(jokes)
 })
 
