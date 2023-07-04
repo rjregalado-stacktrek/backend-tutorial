@@ -3,7 +3,7 @@ const app = express();
 
 const PORT = 3001;
 
-let jokes =  [
+let  products =  [
     {
       "id": 1,
       "setup": "Why did the tomato turn red?",
@@ -34,13 +34,13 @@ app.get('/', (req,res) => {
 })
 
 // get all the contents in database
-app.get('/api/jokes', (req,res) => {
+app.get('/api/products', (req,res) => {
     res.json(jokes)
 })
 
 // get a single entry by id
 app.get('/api/jokes/:id', (req,res) => {
-	const id = Number(req.params.id)
+	const id = Number(req.params.id) // const req.params = { id:1, body: "This is body"}
     const joke = jokes.find(joke => joke.id === id)
     res.json(joke)
 })
@@ -49,17 +49,29 @@ app.get('/api/jokes/:id', (req,res) => {
 app.delete('/api/jokes/:id', (req,res) => {
     const id  = Number(req.params.id)
     jokes = jokes.filter(joke => joke.id !== id)
-    res.status(204).end()
+    res.send('Deleted successfully!').end()
 })
 
-// add a new entry
-app.post('/api/jokes', (req,res) => {
+// // add a new entry
+// app.post('/api/jokes', (req,res) => {
+//     const maxId = jokes.length > 0
+//         ? Math.max(...jokes.map(n => n.id))
+//         : 0
+//     const joke = req.body
+//     res.json(joke)
+// })
+
+app.post('/api/jokes', (req, res) => {
     const maxId = jokes.length > 0
         ? Math.max(...jokes.map(n => n.id))
-        : 0
-    const joke = req.body
-    res.json(joke)
-})
+        : 0;
+    const joke = req.body;
+    //joke.id = maxId + 1; // Assign a new ID to the joke
+
+    jokes.push(joke); // Add the joke to the array
+
+    res.json(joke);
+});
 
 app.patch('/api/jokes/:id', (req, res) => {
     const id = Number(req.params.id);
@@ -89,3 +101,4 @@ app.put('/api/jokes/:id', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
+
