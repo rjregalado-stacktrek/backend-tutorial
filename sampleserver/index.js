@@ -49,7 +49,7 @@ app.get('/api/jokes/:id', (req,res) => {
 app.delete('/api/jokes/:id', (req,res) => {
     const id  = Number(req.params.id)
     jokes = jokes.filter(joke => joke.id !== id)
-    res.status(204).end()
+    res.send('Deleted successfully!').end()
 })
 
 // // add a new entry
@@ -66,7 +66,7 @@ app.post('/api/jokes', (req, res) => {
         ? Math.max(...jokes.map(n => n.id))
         : 0;
     const joke = req.body;
-    joke.id = maxId + 1; // Assign a new ID to the joke
+    //joke.id = maxId + 1; // Assign a new ID to the joke
 
     jokes.push(joke); // Add the joke to the array
 
@@ -101,3 +101,4 @@ app.put('/api/jokes/:id', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
+
