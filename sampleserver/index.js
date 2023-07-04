@@ -40,7 +40,7 @@ app.get('/api/jokes', (req,res) => {
 
 // get a single entry by id
 app.get('/api/jokes/:id', (req,res) => {
-	const id = Number(req.params.id)
+	const id = Number(req.params.id) // const req.params = { id:1, body: "This is body"}
     const joke = jokes.find(joke => joke.id === id)
     res.json(joke)
 })
@@ -52,14 +52,26 @@ app.delete('/api/jokes/:id', (req,res) => {
     res.status(204).end()
 })
 
-// add a new entry
-app.post('/api/jokes', (req,res) => {
+// // add a new entry
+// app.post('/api/jokes', (req,res) => {
+//     const maxId = jokes.length > 0
+//         ? Math.max(...jokes.map(n => n.id))
+//         : 0
+//     const joke = req.body
+//     res.json(joke)
+// })
+
+app.post('/api/jokes', (req, res) => {
     const maxId = jokes.length > 0
         ? Math.max(...jokes.map(n => n.id))
-        : 0
-    const joke = req.body
-    res.json(joke)
-})
+        : 0;
+    const joke = req.body;
+    joke.id = maxId + 1; // Assign a new ID to the joke
+
+    jokes.push(joke); // Add the joke to the array
+
+    res.json(joke);
+});
 
 app.patch('/api/jokes/:id', (req, res) => {
     const id = Number(req.params.id);
