@@ -3,7 +3,7 @@ const app = express();
 
 const PORT = 3001;
 
-let  products =  [
+let  jokes =  [
     {
       "id": 1,
       "setup": "Why did the tomato turn red?",
@@ -34,15 +34,18 @@ app.get('/', (req,res) => {
 })
 
 // get all the contents in database
-app.get('/api/products', (req,res) => {
+app.get('/api/jokes', (req,res) => {
     res.json(jokes)
 })
 
 // get a single entry by id
-app.get('/api/jokes/:id', (req,res) => {
-	const id = Number(req.params.id) // const req.params = { id:1, body: "This is body"}
-    const joke = jokes.find(joke => joke.id === id)
-    res.json(joke)
+app.get('/api/jokes/:id', (req,res) => { // :id -> parameters
+	const id = Number(req.params.id) // const params = { id:1, body: "This is body"}
+    const joke = jokes.find(joke => {
+      console.log(joke.id, typeof joke.id, id, typeof id, joke.id === id);
+      return joke.id === id ? res.json(joke) : res.status(400).send('Nothing to display!')
+    } )
+    //res.json(joke)
 })
 
 // delete an entry, returns status 204 with no response
@@ -68,8 +71,9 @@ app.post('/api/jokes', (req, res) => {
     const joke = req.body;
     //joke.id = maxId + 1; // Assign a new ID to the joke
 
-    jokes.push(joke); // Add the joke to the array
-
+    joke.id > maxId && joke.setup && joke.punchline ? jokes.push(joke) : res.status(400).send('Invalid input!') // Add the joke to the array
+    console.log(joke.id > maxId && joke.setup && joke.punchline)
+    //console.log(jokes)
     res.json(joke);
 });
 
